@@ -14,17 +14,21 @@ import DropIn from "braintree-web-drop-in-react";
 import PaymentPage from '../../../containers/pages/paymentPage';
 import axios from "axios";
 import { Row, Col, Button } from 'reactstrap';
+import { URN } from '../../../redux/actions';
 // import Razorpay from 'razorpay';
 
 
 
 var razorpay = new window.Razorpay({
-    key: 'bsKkX8SdZRAiKFDWdR3oeTbcV',
-    key_secret: 'rzp_test_DUi6OPmtPxMldq'
+    key: 'rzp_test_igd3N3CAkAeRcV',
+    key_secret:'rXLwbN77HeeIVma6EQDScJ3P'
 });
+
+
+// RAZORPAY_API_KEY=rzp_test_igd3N3CAkAeRcV
+// RAZORPAY_API_SECRET=rXLwbN77HeeIVma6EQDScJ3P
 let globalData = {
     'contact': "9960525050",
-    //'vpa': "mayurmahale9@okaxis", //for upi
     'email': "mayurmahale9@gmail.com",
     'method': "card",
 }
@@ -73,11 +77,11 @@ const Checkout = ({ products }) => {
     useEffect(() => {
         getToken(userId, token);
         razorpay.once('ready', function (response) {
-            var nb = response.methods.netbanking;
-            Object.keys(nb).forEach(function (key) {
+            // var nb = response.methods.netbanking;
+            // Object.keys(nb).forEach(function (key) {
 
 
-            });
+            // });
         })
     }, []);
 
@@ -128,7 +132,7 @@ const Checkout = ({ products }) => {
         order.products = arr;
         mainOrder.order = order;
 
-        axios.post(`http://192.168.0.107:8000/api/order/create/${userId}`,
+        axios.post(`${URN}/order/create/${userId}`,
             mainOrder, { headers: authHeader() })
             .then(response => {
                 globalData['order_id'] = response.data.razorpay_order_id
@@ -250,7 +254,7 @@ const Checkout = ({ products }) => {
         let number = e.target.value;
 
         setData({ ...data });
-        axios.post('http://192.168.0.107:8000/api/validate/card', {
+        axios.post(`${URN}/validate/card`, {
             number, checkCard
         }).then(res => {
             setData({ ...data, cardBrand: res.data.response.brand })
@@ -396,7 +400,7 @@ const Checkout = ({ products }) => {
                     className="btn btn-success" id="rzp-button1" onClick={(function (e) {
                         razorpay.createPayment(globalData);
                         razorpay.on('payment.success', function (resp) {
-
+                            console.log(resp);
                         });
                         razorpay.on('payment.error', function (resp) { 
                             console.log(resp.error)

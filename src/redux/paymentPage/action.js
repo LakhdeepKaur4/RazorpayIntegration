@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-import{PAYMENT_DATA,ADD_CARD,GET_CARD} from '../actions';
+import{PAYMENT_DATA,ADD_CARD,GET_CARD,URN} from '../actions';
 
 
 export function getData(){
     
-  const request = axios.get(`http://192.168.0.107:8000/api/get/card/linked`)
+  const request = axios.get(`${URN}/get/card/linked`)
     .then(response => response.data)
     return {
         type: PAYMENT_DATA,
@@ -16,7 +16,7 @@ export function getData(){
 export function addCard(values){
   console.log('action reached',values);
   
-const request = axios.post(`http://192.168.0.107:8000/api/save/card/data`,values)
+const request = axios.post(`${URN}/save/card/data`,values)
   .then(response => response.data)
   return {
       type: ADD_CARD,
@@ -26,7 +26,7 @@ const request = axios.post(`http://192.168.0.107:8000/api/save/card/data`,values
 
 export function getCard(user){
     console.log(user);
-  const request = axios.get(`http://192.168.0.107:8000/api/card/${user}`)
+  const request = axios.get(`${URN}/card/${user}`)
     .then(response => response.data)
     return {
         type: GET_CARD,

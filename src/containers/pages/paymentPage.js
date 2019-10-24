@@ -10,29 +10,13 @@ import { isAuthenticated } from "../../views/app/auth";
 import Razorpay from 'razorpay';
 import { Button } from 'react-yandex-maps';
 import axios from 'axios';
+import { URN } from '../../redux/actions';
 
-var razorpay = new Razorpay({
-    key_id: 'rzp_test_igd3N3CAkAeRcV',
-    key_secret: 'rXLwbN77HeeIVma6EQDScJ3P'
-});
+
 const userId = isAuthenticated() && isAuthenticated().user._id;
 const token = isAuthenticated() && isAuthenticated().token;
 
-var data = {
-    'card[cvv]': "123",
-    'card[expiry_month]': "02",
-    'card[expiry_year]': "23",
-    'card[name]': "akshay",
-    'card[number]': "5104015555555558",
-    'order_id': "order_DX5wGPRBirKutG",
-    'amount': 2000,
-    'contact': "9960525050",
-    //'vpa': "mayurmahale9@okaxis", //for upi
-    'email': "mayurmahale9@gmail.com",
-    'method': "card"
-    //'bank': 'HDFC', //for Netbanking
 
-};
 class Payment extends Component {
 
     constructor(props) {
@@ -82,63 +66,6 @@ class Payment extends Component {
     }
 
 
-    PayByRazorPay = () => {
-        //     // let rza = razorpay.createPayment({
-        //     const data = {
-        //         amount: 10,
-        //         email: 'gaurav.kumar@gmail.com',
-        //         contact: '9123456780',
-        //         order_id: 'order_DX5wGPRBirKutG',
-        //         method: 'card',
-        //         'card[name]': 'Gaurav Kumar',
-        //         'card[number]': '4111111111111111',
-        //         'card[cvv]': '566',
-        //         'card[expiry_month]': '10',
-        //         'card[expiry_year]': '20'
-        //     }
-        //     //   });
-
-
-        //     // has to be placed within user initiated context, such as click, in order for popup to open.
-        //     razorpay.createPayment(data);
-
-        //     razorpay.on('payment.success', function (resp) {
-        //         alert(resp)
-        //         alert(resp.razorpay_order_id)
-        //         alert(resp.razorpay_signature)
-        //     }); // will pass payment ID, order ID, and Razorpay signature to success handler.
-
-        //     razorpay.on('payment.error', function (resp) { alert(resp.error.description) }); // will pass error object to error handler
-
-        //     console.log("razorpay", razorpay)
-        var razorpay = new Razorpay({
-            key: 'rzp_test_igd3N3CAkAeRcV', //Replace your merchant api key here
-            image: 'https://i.imgur.com/n5tjHFD.pnghttps://i.imgur.com/n5tjHFD.png',
-            redirect: 'true',
-            callback_url: 'http://localhost:8080/Razorpay/ThankYou.php' //Kindly handle the payment response on this URL
-        });
-
-        razorpay.once('ready', function (response) {
-            console.log(response.methods.netbanking);
-            var nb = response.methods.netbanking;
-            Object.keys(nb).forEach(function (key) {
-
-                console.log(key, nb[key]);
-
-            });
-        })
-
-
-        document.getElementById('rzp-button1').onclick = function (e) {
-            razorpay.createPayment(data);
-
-            razorpay.on('payment.success', function (resp) {
-                console.log(resp)
-            });
-
-            razorpay.on('payment.error', function (resp) { console.log(resp.error.description) });
-        }
-    }
 
     addCard = (e) => {
         e.preventDefault();
@@ -192,7 +119,7 @@ class Payment extends Component {
         let number = e.target.value;
         console.log('onBlur');
         this.setState({ [e.target.name]: e.target.value });
-        axios.post('http://192.168.0.107:8000/api/validate/card', {
+        axios.post(`${URN}/validate/card`, {
             number, checkCard
         }).then(res => {
             this.setState({ cardBrand: res.data.response.brand })
@@ -224,7 +151,7 @@ class Payment extends Component {
         console.log('state', this.state);
         this.props.value(this.state);
         this.props.addCard(this.state)
-        this.props.getCard();
+        // this.props.getCard();
         this.setState({ show: false, cardBrand: '', errMessage: '', cardStatus: '', currentDate: '' });
 
     }

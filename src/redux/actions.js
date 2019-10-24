@@ -5,7 +5,9 @@ export const CHANGE_LOCALE = "CHANGE_LOCALE";
 
 export const PAYMENT_DATA="PAYMENT_DATA";
 export const ADD_CARD="ADD_CARD";
-export const GET_CARD="GET_CARD"
+export const GET_CARD="GET_CARD";
+export const URN="https://ecommercedeals.herokuapp.com/api";
+// export const URN="http://192.168.0.107:8000/api";
 
 
 /* MENU */
